@@ -269,7 +269,11 @@ func (pdfg *PDFGenerator) run() error {
 
 	errbuf := &bytes.Buffer{}
 
+	log.Println("about to exec")
+
 	cmd := exec.Command(pdfg.binPath, pdfg.Args()...)
+
+	log.Println("command exec created")
 
 	cmd.Stdout = &pdfg.outbuf
 	cmd.Stderr = errbuf
