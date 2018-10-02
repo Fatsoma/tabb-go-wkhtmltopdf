@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -272,6 +273,8 @@ func (pdfg *PDFGenerator) run() error {
 
 	cmd.Stdout = &pdfg.outbuf
 	cmd.Stderr = errbuf
+
+	log.Println("About to go through pages...")
 	//if there is a pageReader page (from Stdin) we set Stdin to that reader
 	for _, page := range pdfg.pages {
 		if page.Reader() != nil {
@@ -279,8 +282,14 @@ func (pdfg *PDFGenerator) run() error {
 			break
 		}
 	}
+	log.Println("Been through pages")
 
 	err := cmd.Run()
+
+	if err != nil {
+		log.Println("Got error... ", err)
+	}
+
 	if err != nil {
 		errStr := errbuf.String()
 		if strings.TrimSpace(errStr) == "" {
